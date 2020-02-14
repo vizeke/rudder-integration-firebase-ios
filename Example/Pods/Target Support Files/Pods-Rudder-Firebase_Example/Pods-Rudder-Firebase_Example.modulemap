@@ -1,0 +1,6 @@
+framework module Pods_Rudder_Firebase_Example {
+  umbrella header "Pods-Rudder-Firebase_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
