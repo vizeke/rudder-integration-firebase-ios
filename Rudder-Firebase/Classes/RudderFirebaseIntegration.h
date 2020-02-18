@@ -8,7 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "RudderIntegration.h"
 #import "RudderClient.h"
-#import <Firebase/Firebase.h>
+
+@import Firebase;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,6 +7,7 @@
 
 #import "RudderFirebaseFactory.h"
 #import "RudderFirebaseIntegration.h"
+#import "RudderLogger.h"
 
 @implementation RudderFirebaseFactory
 
@@ -25,6 +26,7 @@ static RudderFirebaseFactory *sharedInstance;
 }
 
 - (nonnull id<RudderIntegration>)initiate:(nonnull NSDictionary *)config client:(nonnull RudderClient *)client rudderConfig:(nonnull RudderConfig *)rudderConfig {
+    [RudderLogger logDebug:@"Creating RudderIntegrationFactory"];
     return [[RudderFirebaseIntegration alloc] initWithConfig:config withAnalytics:client withRudderConfig:rudderConfig];
 }
 

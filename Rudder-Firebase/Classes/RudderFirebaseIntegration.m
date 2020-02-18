@@ -20,6 +20,7 @@
         _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
         [FIRApp configure];
     }
+    [RudderLogger logDebug:@"Initializing Firebase SDK"];
     return self;
 }
 
@@ -42,14 +43,13 @@
             if (traits != nil) {
                 for (NSString *key in [traits keyEnumerator]) {
                     if (![_GOOGLE_RESERVED_KEYWORDS containsObject:key]) {
+                        [RudderLogger logDebug:@"Setting userProperties to Firebase"];
                         [FIRAnalytics setUserPropertyString:traits[key] forName:key];
                     }
                 }
             }
         } else if ([type isEqualToString:@"screen"]) {
-            if (message.event != nil && ![message.event isEqualToString:@""]) {
-                [FIRAnalytics setScreenName:message.event screenClass:nil];
-            }
+            [RudderLogger logInfo:@"Rudder doesn't support screen calls for Firebase Native SDK mode as screen recording in Firebase works out of the box"];
         } else if ([type isEqualToString:@"track"]) {
             NSString *eventName = message.event;
             NSDictionary *properties = message.properties;
@@ -98,11 +98,17 @@
                 } else if ([eventName isEqualToString:ECommCheckoutStepViewed]) {
                     firebaseEvent = kFIREventCheckoutProgress;
                     [self addCheckoutProperties:params properties:properties];
+                } else if ([eventName isEqualToString:ECommProductClicked]) {
+                    firebaseEvent = kFIREventSelectContent;
+                    [self addProductProperties:params properties:properties];
+                } else if ([eventName isEqualToString:ECommPromotionViewed]) {
+                    firebaseEvent = kFIREventPresentOffer;
                 } else {
                     firebaseEvent = eventName;
                 }
                 if(![firebaseEvent isEqualToString:@""]) {
                     [self attachCustomProperties:params properties:properties];
+                    [RudderLogger logDebug:[NSString stringWithFormat:@"Logged \"%@\" to Firebase", firebaseEvent]];
                     [FIRAnalytics logEventWithName:firebaseEvent parameters:params];
                 }
             }
