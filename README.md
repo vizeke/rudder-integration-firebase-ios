@@ -14,11 +14,13 @@ Released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 ## Getting Started with Firebase Integration of Android SDK
 1. Add [Firebase](http://firebase.google.com) as a destination in the [Dashboard](https://app.rudderlabs.com/).
 
-2. Rudder-Firebase is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
+2. Rudder-Firebase is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile and followed by `pod install`:
 
 ```ruby
 pod 'Rudder-Firebase'
 ```
+
+3. Download the `GoogleService-Info.plist` from your Firebase console and put it in your Project.
 
 ## Initialize ```RudderClient```
 Put this code in your ```AppDelegate.m``` file under the method ```didFinishLaunchingWithOptions```
