@@ -7,7 +7,7 @@
 //
 
 #import "_AppDelegate.h"
-#import <RudderSDKCore/RudderSDKCore.h>
+#import <Rudder/Rudder.h>
 #import "RudderFirebaseFactory.h"
 
 @implementation _AppDelegate

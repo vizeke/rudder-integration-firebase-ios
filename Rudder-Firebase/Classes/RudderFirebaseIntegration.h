@@ -9,7 +9,8 @@
 #import "RudderIntegration.h"
 #import "RudderClient.h"
 
-@import Firebase;
+@import FirebaseCore;
+@import FirebaseAnalytics;
 
 NS_ASSUME_NONNULL_BEGIN
 

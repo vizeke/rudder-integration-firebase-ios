@@ -7,7 +7,7 @@
 //
 
 #import "_ViewController.h"
-#import <RudderSDKCore/RudderSDKCore.h>
+#import <Rudder/Rudder.h>
 
 @interface _ViewController ()
 
