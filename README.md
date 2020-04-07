@@ -1,6 +1,3 @@
-[![Version](https://img.shields.io/cocoapods/v/Rudder-Firebase.svg?style=flat)](https://cocoapods.org/pods/Rudder-Firebase)
-[![Platform](https://img.shields.io/cocoapods/p/Rudder-Firebase.svg?style=flat)](https://cocoapods.org/pods/Rudder-Firebase)
-
 # What is Rudder?
 
 **Short answer:**
@@ -17,7 +14,7 @@ Released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 2. Rudder-Firebase is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile and followed by `pod install`:
 
 ```ruby
-pod 'Rudder-Firebase', '0.1.0-beta.1'
+pod 'Rudder-Firebase', '0.1.1'
 ```
 
 3. Download the `GoogleService-Info.plist` from your Firebase console and put it in your Project.

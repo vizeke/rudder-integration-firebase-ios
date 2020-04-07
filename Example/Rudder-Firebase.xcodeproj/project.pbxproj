@@ -66,7 +66,7 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A8AA71221801B7AA4E8E18A1 /* Pods-Rudder-Firebase_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rudder-Firebase_Example.debug.xcconfig"; path = "Target Support Files/Pods-Rudder-Firebase_Example/Pods-Rudder-Firebase_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C7561AF63A8CA8E41AD7E467 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		D11A801BAABC19DBD9B1A88C /* Rudder-Firebase.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "Rudder-Firebase.podspec"; path = "../Rudder-Firebase.podspec"; sourceTree = "<group>"; };
+		D11A801BAABC19DBD9B1A88C /* Rudder-Firebase.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "Rudder-Firebase.podspec"; path = "../Rudder-Firebase.podspec"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E40AC682B3A3D8A859D10F2D /* Pods_Rudder_Firebase_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rudder_Firebase_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF5D64D656479DC0EA0FF94A /* Pods_Rudder_Firebase_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rudder_Firebase_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
