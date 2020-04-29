@@ -24,6 +24,32 @@
     return self;
 }
 
+- (NSString*)getStringValue:(NSObject *)value withError:(NSString**)error{
+    NSString* jsonString = nil;
+    if (value != nil) {
+        NSError* err;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                     options:kNilOptions
+                                                     error:&err];
+
+        if (! jsonData) {
+            if (error != NULL) {
+                *error = err.localizedDescription;
+            }
+        } else {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            if([jsonString length] > 100) {
+                if (error != NULL) {
+                    *error = @"property value's length is greater than 100";
+                }
+                jsonString = nil;
+            }
+        }
+    }
+    return jsonString;
+}
+
+
 - (void)dump:(RudderMessage *)message {
     if (message != nil) {
         [self processRudderEvent:message];
@@ -42,9 +68,14 @@
             NSDictionary *traits = message.context.traits;
             if (traits != nil) {
                 for (NSString *key in [traits keyEnumerator]) {
-                    if (![_GOOGLE_RESERVED_KEYWORDS containsObject:key]) {
-                        [RudderLogger logDebug:@"Setting userProperties to Firebase"];
-                        [FIRAnalytics setUserPropertyString:traits[key] forName:key];
+                    if([key isEqualToString:@"userId"]) continue;
+                    NSString* firebaseKey = [[[key lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                    if([firebaseKey length] > 24) {
+                        firebaseKey = [firebaseKey substringToIndex:[@24 unsignedIntegerValue]];
+                    }
+                    if (![_GOOGLE_RESERVED_KEYWORDS containsObject:firebaseKey]) {
+                        [RudderLogger logDebug:[NSString stringWithFormat:@"Setting userProperty to Firebase: %@", firebaseKey]];
+                        [FIRAnalytics setUserPropertyString:traits[key] forName:firebaseKey];
                     }
                 }
             }
@@ -104,10 +135,17 @@
                 } else if ([eventName isEqualToString:ECommPromotionViewed]) {
                     firebaseEvent = kFIREventPresentOffer;
                 } else {
-                    firebaseEvent = eventName;
+                    firebaseEvent = [[[eventName lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                    if([firebaseEvent length] > 40) {
+                        firebaseEvent = [firebaseEvent substringToIndex:[@40 unsignedIntegerValue]];
+                    }
                 }
                 if(![firebaseEvent isEqualToString:@""]) {
-                    [self attachCustomProperties:params properties:properties];
+                    if ([params count] == 0) {
+                        [self attachAllCustomProperties:params properties:properties];
+                    } else {
+                        [self attachUnreservedCustomProperties:params properties:properties];
+                    }
                     [RudderLogger logDebug:[NSString stringWithFormat:@"Logged \"%@\" to Firebase", firebaseEvent]];
                     [FIRAnalytics logEventWithName:firebaseEvent parameters:params];
                 }
@@ -219,12 +257,62 @@
     }
 }
 
-- (void) attachCustomProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
+- (void) attachUnreservedCustomProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
     if(properties != nil && params != nil) {
         for (NSString *key in [properties keyEnumerator]) {
-            if (![_RESERVED_PARAM_NAMES containsObject:key]) {
-                [params setValue:properties[key] forKey:key];
+            NSString* firebaseKey = [[[key lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+            if([firebaseKey length] > 40) { // 40: maximum supported key length by Firebase
+                firebaseKey = [firebaseKey substringToIndex:[@40 unsignedIntegerValue]];
             }
+            id value = properties[key];
+            if (![_RESERVED_PARAM_NAMES containsObject:firebaseKey]) {
+                if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+                    // value is a valid type
+                    // Firebase supports only NSString and NSNumber parameter types
+                    if([value isKindOfClass:[NSString class]]) {
+                        if([value length] > 100) value = [value substringToIndex:[@100 unsignedIntegerValue]];
+                    }
+                } else {
+                    // converting paramter's type to NSString
+                    NSString* error;
+                    NSString* jsonString = [self getStringValue:value withError:&error];
+                    if(jsonString == nil) {
+                        [RudderLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
+                        continue;// drop the current property
+                    }
+                    value = jsonString;
+                }
+                [params setValue:value forKey:firebaseKey];
+            }
+        }
+    }
+}
+
+- (void) attachAllCustomProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
+    if(properties != nil && params != nil) {
+        for (NSString *key in [properties keyEnumerator]) {
+            NSString* firebaseKey = [[[key lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+            if([firebaseKey length] > 40) { // 40: maximum supported key length by Firebase
+                firebaseKey = [firebaseKey substringToIndex:[@40 unsignedIntegerValue]];
+            }
+            id value = properties[key];
+            if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]) {
+                // value is a valid type
+                // Firebase supports only NSString and NSNumber parameter types
+                if([value isKindOfClass:[NSString class]]) {
+                    if([value length] > 100) value = [value substringToIndex:[@100 unsignedIntegerValue]];
+                }
+            } else {
+                // converting paramter's type to NSString
+                NSString* error;
+                NSString* jsonString = [self getStringValue:value withError:&error];
+                if(jsonString == nil) {
+                    [RudderLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
+                    continue;// drop the current property
+                }
+                value = jsonString;
+            }
+            [params setValue:value forKey:firebaseKey];
         }
     }
 }
