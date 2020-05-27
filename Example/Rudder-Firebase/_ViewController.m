@@ -19,13 +19,13 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [[RudderClient sharedInstance] track:@"daily_rewards_claim"];
-    [[RudderClient sharedInstance] track:@"level_up"];
-    [[RudderClient sharedInstance] track:@"revenue"];
-    [[RudderClient sharedInstance] identify:@"developer_user_id" traits:@{@"foo": @"bar", @"foo1": @"bar1"}];
-    [[RudderClient sharedInstance] track:@"test_event" properties:@{@"key":@"value", @"foo": @"bar"}];
-    [[RudderClient sharedInstance] track:@"purchase" properties:@{@"total":@2.99, @"currency": @"USD"}];
-    [[RudderClient sharedInstance] reset];
+    [[RSClient sharedInstance] track:@"daily_rewards_claim"];
+    [[RSClient sharedInstance] track:@"level_up"];
+    [[RSClient sharedInstance] track:@"revenue"];
+    [[RSClient sharedInstance] identify:@"developer_user_id" traits:@{@"foo": @"bar", @"foo1": @"bar1"}];
+    [[RSClient sharedInstance] track:@"test_event" properties:@{@"key":@"value", @"foo": @"bar"}];
+    [[RSClient sharedInstance] track:@"purchase" properties:@{@"total":@2.99, @"currency": @"USD"}];
+    [[RSClient sharedInstance] reset];
 }
 
 - (void)didReceiveMemoryWarning

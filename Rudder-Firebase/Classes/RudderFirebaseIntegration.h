@@ -6,20 +6,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RudderIntegration.h"
-#import "RudderClient.h"
+#import <Rudder/Rudder.h>
 
 @import FirebaseCore;
 @import FirebaseAnalytics;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RudderFirebaseIntegration : NSObject<RudderIntegration>
+@interface RudderFirebaseIntegration : NSObject<RSIntegration>
 
 @property NSArray* GOOGLE_RESERVED_KEYWORDS;
 @property NSArray* RESERVED_PARAM_NAMES;
 
-- (instancetype)initWithConfig:(NSDictionary *)config withAnalytics:(RudderClient *)client withRudderConfig:(RudderConfig*) rudderConfig;
+- (instancetype)initWithConfig:(NSDictionary *)config withAnalytics:(RSClient *)client withRudderConfig:(RSConfig*) rudderConfig;
 
 @end
 

@@ -15,11 +15,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    RudderConfigBuilder *builder = [[RudderConfigBuilder alloc] init];
+    RSConfigBuilder *builder = [[RSConfigBuilder alloc] init];
     [builder withDataPlaneUrl:@"https://843fa4c8.ngrok.io"];
     [builder withFactory:[RudderFirebaseFactory instance]];
-    [builder withLoglevel:RudderLogLevelDebug];
-    [RudderClient getInstance:@"1WC1fQ3nIuFlZcKYCN2zLirPq4D" config:[builder build]];
+    [builder withLoglevel:RSLogLevelDebug];
+    [RSClient getInstance:@"1WC1fQ3nIuFlZcKYCN2zLirPq4D" config:[builder build]];
     return YES;
 }
 

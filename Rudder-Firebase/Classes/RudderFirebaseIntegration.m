@@ -6,21 +6,19 @@
 //
 
 #import "RudderFirebaseIntegration.h"
-#import "RudderLogger.h"
-#import "ECommerceEvents.h"
 
 @implementation RudderFirebaseIntegration
 
 #pragma mark - Initialization
 
-- (instancetype)initWithConfig:(NSDictionary *)config withAnalytics:(nonnull RudderClient *)client  withRudderConfig:(nonnull RudderConfig *)rudderConfig {
+- (instancetype)initWithConfig:(NSDictionary *)config withAnalytics:(nonnull RSClient *)client  withRudderConfig:(nonnull RSConfig *)rudderConfig {
     self = [super init];
     if (self) {
         _GOOGLE_RESERVED_KEYWORDS = [[NSArray alloc] initWithObjects:@"age", @"gender", @"interest", nil];
         _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
         [FIRApp configure];
     }
-    [RudderLogger logDebug:@"Initializing Firebase SDK"];
+    [RSLogger logDebug:@"Initializing Firebase SDK"];
     return self;
 }
 
@@ -50,19 +48,19 @@
 }
 
 
-- (void)dump:(RudderMessage *)message {
+- (void)dump:(RSMessage *)message {
     if (message != nil) {
         [self processRudderEvent:message];
     }
 }
 
-- (void) processRudderEvent: (nonnull RudderMessage *) message {
+- (void) processRudderEvent: (nonnull RSMessage *) message {
     NSString *type = message.type;
     if (type != nil) {
         if ([type  isEqualToString: @"identify"]) {
             NSString *userId = message.userId;
             if (userId != nil && ![userId isEqualToString:@""]) {
-                [RudderLogger logDebug:@"Setting userId to firebase"];
+                [RSLogger logDebug:@"Setting userId to firebase"];
                 [FIRAnalytics setUserID:userId];
             }
             NSDictionary *traits = message.context.traits;
@@ -74,13 +72,13 @@
                         firebaseKey = [firebaseKey substringToIndex:[@24 unsignedIntegerValue]];
                     }
                     if (![_GOOGLE_RESERVED_KEYWORDS containsObject:firebaseKey]) {
-                        [RudderLogger logDebug:[NSString stringWithFormat:@"Setting userProperty to Firebase: %@", firebaseKey]];
+                        [RSLogger logDebug:[NSString stringWithFormat:@"Setting userProperty to Firebase: %@", firebaseKey]];
                         [FIRAnalytics setUserPropertyString:traits[key] forName:firebaseKey];
                     }
                 }
             }
         } else if ([type isEqualToString:@"screen"]) {
-            [RudderLogger logInfo:@"Rudder doesn't support screen calls for Firebase Native SDK mode as screen recording in Firebase works out of the box"];
+            [RSLogger logInfo:@"Rudder doesn't support screen calls for Firebase Native SDK mode as screen recording in Firebase works out of the box"];
         } else if ([type isEqualToString:@"track"]) {
             NSString *eventName = message.event;
             NSDictionary *properties = message.properties;
@@ -146,12 +144,12 @@
                     } else {
                         [self attachUnreservedCustomProperties:params properties:properties];
                     }
-                    [RudderLogger logDebug:[NSString stringWithFormat:@"Logged \"%@\" to Firebase", firebaseEvent]];
+                    [RSLogger logDebug:[NSString stringWithFormat:@"Logged \"%@\" to Firebase", firebaseEvent]];
                     [FIRAnalytics logEventWithName:firebaseEvent parameters:params];
                 }
             }
         } else {
-            [RudderLogger logWarn:@"Message type is not recognized"];
+            [RSLogger logWarn:@"Message type is not recognized"];
         }
     }
 }
@@ -277,7 +275,7 @@
                     NSString* error;
                     NSString* jsonString = [self getStringValue:value withError:&error];
                     if(jsonString == nil) {
-                        [RudderLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
+                        [RSLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
                         continue;// drop the current property
                     }
                     value = jsonString;
@@ -307,7 +305,7 @@
                 NSString* error;
                 NSString* jsonString = [self getStringValue:value withError:&error];
                 if(jsonString == nil) {
-                    [RudderLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
+                    [RSLogger logError:[NSString stringWithFormat:@"RudderFirebaseIntegration: track: properties: key - \'%@\': %@", key, error]];
                     continue;// drop the current property
                 }
                 value = jsonString;
