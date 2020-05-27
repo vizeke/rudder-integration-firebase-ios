@@ -14,12 +14,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSString *DATA_PLANE_URL = @"https://843fa4c8.ngrok.io";
+    NSString *WRITE_KEY = @"1WC1fQ3nIuFlZcKYCN2zLirPq4D";
+    
     // Override point for customization after application launch.
     RSConfigBuilder *builder = [[RSConfigBuilder alloc] init];
-    [builder withDataPlaneUrl:@"https://843fa4c8.ngrok.io"];
+    [builder withDataPlaneUrl:DATA_PLANE_URL];
     [builder withFactory:[RudderFirebaseFactory instance]];
     [builder withLoglevel:RSLogLevelDebug];
-    [RSClient getInstance:@"1WC1fQ3nIuFlZcKYCN2zLirPq4D" config:[builder build]];
+    [RSClient getInstance:WRITE_KEY config:[builder build]];
     return YES;
 }
 

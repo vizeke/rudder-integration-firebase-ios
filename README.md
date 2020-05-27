@@ -22,10 +22,11 @@ pod 'Rudder-Firebase'
 ## Initialize ```RudderClient```
 Put this code in your ```AppDelegate.m``` file under the method ```didFinishLaunchingWithOptions```
 ```
-RudderConfigBuilder *builder = [[RudderConfigBuilder alloc] init];
-[builder withEndPointUrl:<YOUR_DATA_PLANE_URL>];
+RSConfigBuilder *builder = [[RSConfigBuilder alloc] init];
+[builder withDataPlaneUrl:DATA_PLANE_URL];
 [builder withFactory:[RudderFirebaseFactory instance]];
-[RudderClient getInstance:<YOUR_WRITE_KEY> config:[builder build]];
+[builder withLoglevel:RSLogLevelDebug];
+[RSClient getInstance:WRITE_KEY config:[builder build]];
 ```
 
 ## Send Events
