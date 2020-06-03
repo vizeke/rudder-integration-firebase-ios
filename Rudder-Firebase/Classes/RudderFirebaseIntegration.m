@@ -16,9 +16,11 @@
     if (self) {
         _GOOGLE_RESERVED_KEYWORDS = [[NSArray alloc] initWithObjects:@"age", @"gender", @"interest", nil];
         _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
-        [FIRApp configure];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [FIRApp configure];
+            [RSLogger  logDebug:@"Rudder-Firebase is initialized"];
+        });
     }
-    [RSLogger logDebug:@"Initializing Firebase SDK"];
     return self;
 }
 
