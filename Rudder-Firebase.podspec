@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/rudderlabs/rudder-integration-firebase-ios'
   s.license          = { :type => "Apache", :file => "LICENSE" }
   s.author           = { 'RudderStack' => 'arnab@rudderlabs.com' }
-  s.source           = { :git => 'https://github.com/rudderlabs/rudder-integration-firebase-ios.git' , :tag => 'v0.1.2-patch.1'}
+  s.source           = { :git => 'https://github.com/rudderlabs/rudder-integration-firebase-ios.git' , :commit => 'db5155f9a4d43464039acf4d9bca0e0e05b33e34'}
   s.platform         = :ios, "9.0"
   s.requires_arc = true
 
