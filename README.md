@@ -9,7 +9,7 @@ Rudder is a platform for collecting, storing and routing customer event data to 
 Released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Getting Started with Firebase Integration of Android SDK
-1. Add [Firebase](http://firebase.google.com) as a destination in the [Dashboard](https://app.rudderlabs.com/).
+1. Add [Firebase](http://firebase.google.com) as a destination in the [Dashboard](https://app.rudderstack.com/).
 
 2. Rudder-Firebase is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile and followed by `pod install`:
 
