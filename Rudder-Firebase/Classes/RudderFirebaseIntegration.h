@@ -7,9 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Rudder/Rudder.h>
+#import <FirebaseCore/FirebaseCore.h>
+#import <FirebaseAnalytics/FirebaseAnalytics.h>
 
-@import FirebaseCore;
-@import FirebaseAnalytics;
+// @import FirebaseCore;
+// @import FirebaseAnalytics;
 
 NS_ASSUME_NONNULL_BEGIN
 
