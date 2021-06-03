@@ -17,8 +17,12 @@
         _GOOGLE_RESERVED_KEYWORDS = [[NSArray alloc] initWithObjects:@"age", @"gender", @"interest", nil];
         _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [FIRApp configure];
-            [RSLogger  logDebug:@"Rudder-Firebase is initialized"];
+            if ([FIRApp defaultApp] == nil){
+                [FIRApp configure];
+                [RSLogger  logDebug:@"Rudder-Firebase is initialized"];
+            } else {
+                [RSLogger  logDebug:@"Firebase core already initialized - skipping on Rudder-Firebase"];
+            }
         });
     }
     return self;
