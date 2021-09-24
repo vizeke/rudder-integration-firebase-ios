@@ -15,7 +15,7 @@
     self = [super init];
     if (self) {
         _GOOGLE_RESERVED_KEYWORDS = [[NSArray alloc] initWithObjects:@"age", @"gender", @"interest", nil];
-        _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
+        _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"revenue", @"total", @"order_id", @"tax", @"shipping", @"coupon", nil];
         dispatch_sync(dispatch_get_main_queue(), ^{
             if ([FIRApp defaultApp] == nil){
                 [FIRApp configure];
@@ -205,9 +205,12 @@
 
 - (void) addOrderProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
     if (params != nil && properties != nil) {
-        NSNumber *value = properties[@"value"];
-        if (value != nil) {
-            [params setValue:value forKey:kFIRParameterValue];
+        if (properties[@"revenue"]) {
+            [params setValue:properties[@"revenue"] forKey:kFIRParameterValue];
+        } else if (properties[@"value"]) {
+            [params setValue:properties[@"value"] forKey:kFIRParameterValue];
+        } else if (properties[@"total"]) {
+            [params setValue:properties[@"total"] forKey:kFIRParameterValue];
         }
         NSString *currency = properties[@"currency"];
         if (currency != nil) {
