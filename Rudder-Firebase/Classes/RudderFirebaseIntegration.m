@@ -215,6 +215,8 @@
         NSString *currency = properties[@"currency"];
         if (currency != nil) {
             [params setValue:currency forKey:kFIRParameterCurrency];
+        } else {
+            [params setValue:@"USD" forKey:kFIRParameterCurrency];
         }
         NSString *order_id = properties[@"order_id"];
         if (order_id != nil) {
