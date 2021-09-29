@@ -205,12 +205,12 @@
 
 - (void) addOrderProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
     if (params != nil && properties != nil) {
-        if (properties[@"revenue"]) {
-            [params setValue:properties[@"revenue"] forKey:kFIRParameterValue];
-        } else if (properties[@"value"]) {
-            [params setValue:properties[@"value"] forKey:kFIRParameterValue];
-        } else if (properties[@"total"]) {
-            [params setValue:properties[@"total"] forKey:kFIRParameterValue];
+        if (properties[@"revenue"] && [self isCompatibleWithRevenue:properties[@"revenue"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"revenue"] doubleValue]] forKey:kFIRParameterValue];
+        } else if (properties[@"value"] && [self isCompatibleWithRevenue:properties[@"value"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"value"] doubleValue]] forKey:kFIRParameterValue];
+        } else if (properties[@"total"] && [self isCompatibleWithRevenue:properties[@"total"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"total"] doubleValue]] forKey:kFIRParameterValue];
         }
         NSString *currency = properties[@"currency"];
         if (currency != nil) {
@@ -233,6 +233,18 @@
             [params setValue:coupon forKey:kFIRParameterCoupon];
         }
     }
+}
+
+-(BOOL) isCompatibleWithRevenue:(NSObject *)value {
+    if ([value isKindOfClass:[NSNumber class]]) {
+        return true;
+    }
+    if ([value isKindOfClass:[NSString class]]) {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        NSNumber *number = [formatter numberFromString:[NSString stringWithFormat:@"%@", value]];
+        return !!number; // If the string is not numeric, number will be nil
+    }
+    return false;
 }
 
 - (void) addProductProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
