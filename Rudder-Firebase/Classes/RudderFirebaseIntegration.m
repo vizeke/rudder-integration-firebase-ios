@@ -15,7 +15,7 @@
     self = [super init];
     if (self) {
         _GOOGLE_RESERVED_KEYWORDS = [[NSArray alloc] initWithObjects:@"age", @"gender", @"interest", nil];
-        _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"order_id", @"tax", @"shipping", @"coupon", nil];
+        _RESERVED_PARAM_NAMES = [[NSArray alloc] initWithObjects:@"product_id", @"name", @"category", @"quantity", @"price", @"currency", @"value", @"revenue", @"total", @"order_id", @"tax", @"shipping", @"coupon", nil];
         dispatch_sync(dispatch_get_main_queue(), ^{
             if ([FIRApp defaultApp] == nil){
                 [FIRApp configure];
@@ -205,13 +205,18 @@
 
 - (void) addOrderProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {
     if (params != nil && properties != nil) {
-        NSNumber *value = properties[@"value"];
-        if (value != nil) {
-            [params setValue:value forKey:kFIRParameterValue];
+        if (properties[@"revenue"] && [self isCompatibleWithRevenue:properties[@"revenue"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"revenue"] doubleValue]] forKey:kFIRParameterValue];
+        } else if (properties[@"value"] && [self isCompatibleWithRevenue:properties[@"value"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"value"] doubleValue]] forKey:kFIRParameterValue];
+        } else if (properties[@"total"] && [self isCompatibleWithRevenue:properties[@"total"]]) {
+            [params setValue:[NSNumber numberWithDouble:[properties[@"total"] doubleValue]] forKey:kFIRParameterValue];
         }
         NSString *currency = properties[@"currency"];
         if (currency != nil) {
             [params setValue:currency forKey:kFIRParameterCurrency];
+        } else {
+            [params setValue:@"USD" forKey:kFIRParameterCurrency];
         }
         NSString *order_id = properties[@"order_id"];
         if (order_id != nil) {
@@ -230,6 +235,18 @@
             [params setValue:coupon forKey:kFIRParameterCoupon];
         }
     }
+}
+
+-(BOOL) isCompatibleWithRevenue:(NSObject *)value {
+    if ([value isKindOfClass:[NSNumber class]]) {
+        return true;
+    }
+    if ([value isKindOfClass:[NSString class]]) {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        NSNumber *number = [formatter numberFromString:[NSString stringWithFormat:@"%@", value]];
+        return !!number; // If the string is not numeric, number will be nil
+    }
+    return false;
 }
 
 - (void) addProductProperties: (NSMutableDictionary *) params properties: (NSDictionary *) properties {

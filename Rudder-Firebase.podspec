@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Rudder-Firebase'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'Privacy and Security focused Segment-alternative. Firebase Native SDK integration support.'
 
   s.description      = <<-DESC
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/rudderlabs/rudder-integration-firebase-ios'
   s.license          = { :type => "Apache", :file => "LICENSE" }
   s.author           = { 'RudderStack' => 'arnab@rudderlabs.com' }
-  s.source           = { :git => 'https://github.com/rudderlabs/rudder-integration-firebase-ios.git' , :tag => 'v1.0.2'}
+  s.source           = { :git => 'https://github.com/rudderlabs/rudder-integration-firebase-ios.git' , :tag => 'v1.0.3'}
   s.platform         = :ios, "9.0"
   s.requires_arc = true
 
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 
   s.static_framework = true
 
-  s.dependency 'Rudder'
-  s.dependency 'Firebase/Core'
-  s.dependency 'FirebaseAnalytics'
+  s.dependency 'Rudder', '1.0.22'
+  s.dependency 'Firebase/Core', '8.7.0'
+  s.dependency 'FirebaseAnalytics', '8.7.0'
 end
