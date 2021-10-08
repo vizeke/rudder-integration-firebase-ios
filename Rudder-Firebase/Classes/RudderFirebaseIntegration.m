@@ -107,9 +107,11 @@
                 } else if ([eventName isEqualToString:ECommOrderCompleted]) {
                     firebaseEvent = kFIREventEcommercePurchase;
                     [self addOrderProperties:params properties:properties];
+                    [self addProductProperties:params properties:properties[@"products"]];
                 } else if ([eventName isEqualToString:ECommOrderRefunded]) {
                     firebaseEvent = kFIREventPurchaseRefund;
                     [self addOrderProperties:params properties:properties];
+                    [self addProductProperties:params properties:properties[@"products"]];
                 } else if ([eventName isEqualToString:ECommProductsSearched]) {
                     firebaseEvent = kFIREventSearch;
                     [self addSearchProperties:params properties:properties];
@@ -127,6 +129,7 @@
                 } else if ([eventName isEqualToString:ECommProductListViewed]) {
                     firebaseEvent = kFIREventViewItemList;
                     [self addProductListProperty:params properties:properties];
+                    [self addProductProperties:params properties:properties[@"products"]];
                 } else if ([eventName isEqualToString:ECommProductRemoved]) {
                     firebaseEvent = kFIREventRemoveFromCart;
                     [self addProductProperties:params properties:properties];
@@ -257,7 +260,7 @@
         }
         NSString *name = properties[@"name"];
         if (name != nil) {
-            [params setValue:product_id forKey:kFIRParameterItemName];
+            [params setValue:name forKey:kFIRParameterItemName];
         }
         NSString *category = properties[@"category"];
         if (category != nil) {
@@ -269,7 +272,7 @@
         }
         NSNumber *price = properties[@"price"];
         if (price != nil) {
-            [params setValue:quantity forKey:kFIRParameterPrice];
+            [params setValue:price forKey:kFIRParameterPrice];
         }
         NSString *currency = properties[@"currency"];
         if (currency != nil) {
@@ -341,6 +344,11 @@
 - (void)reset {
     // Firebase doesn't support reset functionality
 }
+
+- (void)flush {
+    // Firebase doesn't support flush functionality
+}
+
 
 @end
 
